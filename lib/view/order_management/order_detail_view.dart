@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/order_management/order_row.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/addres_view_mode.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/admin_order_detail_view_model.dart';
@@ -11,7 +12,7 @@ import '../../model/my_order_model.dart';
 import '../../view_model/my_order_detail_view_model.dart';
 
 class OrdersDetailView extends StatefulWidget {
-  final OrderModel mObj;
+  final OrderModelNew mObj;
 
   const OrdersDetailView({super.key, required this.mObj});
 
@@ -26,7 +27,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
   void initState() {
     super.initState();
     adminDetailVM = Get.put(
-        AdminOrderDetailViewModel(widget.mObj.orderId, widget.mObj.userId));
+        AdminOrderDetailViewModel(widget.mObj.id, widget.mObj.user));
   }
 
   @override
@@ -84,7 +85,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                       children: [
                         Expanded(
                           child: Text(
-                            "Order ID: #${widget.mObj.orderId}",
+                            "Order ID: #${widget.mObj.id}",
                             style: TextStyle(
                                 color: TColor.primaryText,
                                 fontSize: 20,
@@ -107,7 +108,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                       children: [
                         Expanded(
                           child: Text(
-                            "${widget.mObj.createdDate}",
+                            "${widget.mObj.createdAt}",
                             style: TextStyle(
                                 color: TColor.secondaryText, fontSize: 12),
                           ),
@@ -124,28 +125,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                     const SizedBox(
                       height: 8,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          "Delivery Type: ",
-                          style: TextStyle(
-                              color: TColor.primaryText,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
-                        ),
-                        Expanded(
-                          child: Text(
-                            getDeliverType(widget.mObj),
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
-                                color: TColor.primaryText, fontSize: 16),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
+                    
                     Row(
                       children: [
                         Text(
@@ -177,7 +157,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                     var pObj = adminDetailVM.cartList[index];
                     return OrderItemRow(
                       pObj: pObj,
-                      allowReview: widget.mObj.orderStatus == 5,
+                      allowReview: widget.mObj.statusSupplier == 5,
                     );
                   },
                   itemCount: adminDetailVM.cartList.length),
@@ -205,7 +185,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                         ),
                         Expanded(
                           child: Text(
-                            " \$${(widget.mObj.totalPrice ?? 0).toStringAsFixed(2)}",
+                            " \$${(widget.mObj.total ?? 0).toStringAsFixed(2)}",
                             textAlign: TextAlign.right,
                             style: TextStyle(
                                 color: TColor.primaryText,
@@ -229,34 +209,10 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                         ),
                         Expanded(
                           child: Text(
-                            "+ \$${(widget.mObj.deliverPrice ?? 0).toStringAsFixed(2)}",
+                            "+ \$${( 0).toStringAsFixed(2)}",
                             textAlign: TextAlign.right,
                             style: TextStyle(
                                 color: TColor.primaryText,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Discount:",
-                          style: TextStyle(
-                              color: TColor.primaryText,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Expanded(
-                          child: Text(
-                            "- \$${(widget.mObj.discountPrice ?? 0).toStringAsFixed(2)}",
-                            textAlign: TextAlign.right,
-                            style: const TextStyle(
-                                color: Colors.red,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500),
                           ),
@@ -285,7 +241,7 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                         ),
                         Expanded(
                           child: Text(
-                            "\$${(widget.mObj.userPayPrice ?? 0).toStringAsFixed(2)}",
+                            "\$${(widget.mObj.total ?? 0).toStringAsFixed(2)}",
                             textAlign: TextAlign.right,
                             style: TextStyle(
                                 color: TColor.primaryText,

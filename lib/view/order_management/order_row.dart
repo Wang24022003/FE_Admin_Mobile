@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common/color_extension.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/my_order_model.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/order_view_model.dart';
 
 class OrderRow extends StatelessWidget {
-  final OrderModel mObj;
+  final OrderModelNew mObj;
   final VoidCallback onTap;
   final OrderViewModel orderViewModel;
-  final Function(OrderModel) updateOrderStatusCallback;
+  final Function(OrderModelNew) updateOrderStatusCallback;
 
   const OrderRow(
       {super.key,
@@ -45,7 +46,7 @@ class OrderRow extends StatelessWidget {
                   ),
                   Expanded(
                       child: Text(
-                    mObj.orderId?.toString() ?? "",
+                    mObj.id?.toString() ?? "",
                     style: TextStyle(
                         color: TColor.primaryText,
                         fontSize: 16,
@@ -58,41 +59,37 @@ class OrderRow extends StatelessWidget {
                           ),
                           onPressed: () {
                             //Xử lý khi nhấn vào nút
-                            switch (mObj.orderStatus) {
-                              case 1:
+                            switch (mObj.statusSupplier) {
+                              case 'UNCONFIRMED':
                                 // Nếu trạng thái đơn hàng là "Placed", thực hiện cập nhật trạng thái thành "Accepted"
                                 orderViewModel.updateOrderStatus(
-                                  orderId: mObj.orderId ?? "",
-                                  userId: mObj.userId ?? "",
+                                  orderId: mObj.id ?? "",
                                   orderStatus:
-                                      2, // Cập nhật trạng thái thành 2 (Accepted)
+                                      'CONFIRMED', // Cập nhật trạng thái thành 2 (Accepted)
                                 );
                                 break;
-                              case 2:
+                              case 'CONFIRMED':
                                 // Nếu trạng thái đơn hàng là "Accepted", thực hiện cập nhật trạng thái thành "Processing"
                                 orderViewModel.updateOrderStatus(
-                                  orderId: mObj.orderId ?? "",
-                                  userId: mObj.userId ?? "",
+                                  orderId: mObj.id ?? "",
                                   orderStatus:
-                                      3, // Cập nhật trạng thái thành 3 (Processing)
+                                      'PREPARE', // Cập nhật trạng thái thành 3 (Processing)
                                 );
                                 break;
-                              case 3:
+                              case 'PREPARE':
                                 // Nếu trạng thái đơn hàng là "Processing", thực hiện cập nhật trạng thái thành "Delivering"
                                 orderViewModel.updateOrderStatus(
-                                  orderId: mObj.orderId ?? "",
-                                  userId: mObj.userId ?? "",
+                                  orderId: mObj.id ?? "",
                                   orderStatus:
-                                      4, // Cập nhật trạng thái thành 4 (Delivering)
+                                      'ON_DELIVERY', // Cập nhật trạng thái thành 4 (Delivering)
                                 );
                                 break;
-                              case 4:
+                              case 'ON_DELIVERY':
                                 // Nếu trạng thái đơn hàng là "Delivering", thực hiện cập nhật trạng thái thành "Delivered"
                                 orderViewModel.updateOrderStatus(
-                                  orderId: mObj.orderId ?? "",
-                                  userId: mObj.userId ?? "",
+                                  orderId: mObj.id ?? "",
                                   orderStatus:
-                                      5, // Cập nhật trạng thái thành 5 (Delivered)
+                                      'DELIVERED', // Cập nhật trạng thái thành 5 (Delivered)
                                 );
                                 break;
                               default:
@@ -113,7 +110,7 @@ class OrderRow extends StatelessWidget {
                 ],
               ),
               Text(
-                mObj.createdDate.toString() ?? "",
+                mObj.createdAt.toString() ?? "",
                 style: TextStyle(color: TColor.secondaryText, fontSize: 12),
               ),
               const SizedBox(
@@ -122,65 +119,12 @@ class OrderRow extends StatelessWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  if ((mObj.productImages?.length ?? 0) > 0)
-                    CachedNetworkImage(
-                      imageUrl: mObj.productImages?[0] ?? "",
-                      placeholder: (context, url) => const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                      width: 60,
-                      height: 60,
-                      fit: BoxFit.contain,
-                    ),
-                  const SizedBox(
-                    width: 15,
-                  ),
+                  
                   Expanded(
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Items: ",
-                                style: TextStyle(
-                                    color: TColor.primaryText,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  mObj.productNames.toString() ?? "",
-                                  style: TextStyle(
-                                      color: TColor.secondaryText,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Delivery Type: ",
-                                style: TextStyle(
-                                    color: TColor.primaryText,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Expanded(
-                                  child: Text(
-                                getDeliverType(mObj),
-                                style: TextStyle(
-                                    color: TColor.primaryText,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500),
-                              )),
-                            ],
-                          ),
-                          Row(
+                            Row(
                             children: [
                               Text(
                                 "Payment Type: ",
@@ -228,122 +172,114 @@ class OrderRow extends StatelessWidget {
   }
 }
 
-String getOrderStatus(OrderModel mObj) {
-  switch (mObj.orderStatus) {
-    case 1:
-      return "Placed";
-    case 2:
-      return "Accepted";
-    case 3:
-      return "Processing";
-    case 4:
-      return "Delivering";
-    case 5:
-      return "Delivered";
-    case 6:
-      return "Canceled";
+String getOrderStatus(OrderModelNew mObj) {
+  switch (mObj.statusSupplier) {
+     case 'CONFIRMED':
+      return 'CONFIRMED';
+    case 'UNCONFIRMED':
+      return 'UNCONFIRMED';
+    case 'PREPARE':
+      return 'PREPARE';
+    case 'ON_DELIVERY':
+      return 'ON_DELIVERY';
+    case 'CANCEL':
+      return 'CANCEL';
+    case 'DELIVERED':
+      return 'DELIVERED';
     default:
-      return "";
+      return '';
+    
   }
 }
 
-String getDeliverType(OrderModel mObj) {
-  switch (mObj.deliverType) {
-    case 1:
-      return "Delivery";
-    case 2:
-      return "Collection";
-    default:
-      return "";
-  }
-}
 
-String getPaymentType(OrderModel mObj) {
-  switch (mObj.paymentType) {
-    case 1:
+String getPaymentType(OrderModelNew mObj) {
+  switch (mObj.paymentMethod) {
+    case 'COD':
       return "Cash On Delivery";
-    case 2:
+    case 'VNPAY':
       return "Online Card Payment";
     default:
       return "";
   }
 }
 
-String getPaymentStatus(OrderModel mObj) {
+String getPaymentStatus(OrderModelNew mObj) {
   //1: waiting, 2: done, 3: fail, 4: refund
 
-  if (mObj.paymentType == 1) {
+  if (mObj.paymentMethod == 1) {
     return "COD";
   }
-  switch (mObj.paymentStatus) {
-    case 1:
-      return "Processing";
-    case 2:
-      return "Success";
-    case 3:
-      return "Fail";
-    case 4:
-      return "Refunded";
+  switch (mObj.isCheckout) {
+    case true:
+      return "ĐÃ THANH TOÁN";
+    case false:
+      return "CHƯA THANH TOÁN";
+    
     default:
       return "";
   }
 }
 
-Color getPaymentStatusColor(OrderModel mObj) {
+Color getPaymentStatusColor(OrderModelNew mObj) {
   //1: waiting, 2: done, 3: fail, 4: refund
 
-  if (mObj.paymentType == 1) {
+  if (mObj.statusUser == 'CONFIRMED') {
     return Colors.orange;
   }
-  switch (mObj.paymentStatus) {
-    case 1:
+  switch (mObj.statusUser) {
+    case 'CONFIRMED':
       return Colors.blue;
-    case 2:
+    case 'UNCONFIRMED':
+      return Colors.blue;
+    case 'PREPARE':
       return Colors.green;
-    case 3:
+    case 'ON_DELIVERY':
       return Colors.red;
-    case 4:
+    case 'CANCEL':
+      return Colors.red;
+    case 'DELIVERED':
       return Colors.green;
     default:
       return Colors.white;
   }
 }
 
-Color getOrderStatusColor(OrderModel mObj) {
+Color getOrderStatusColor(OrderModelNew mObj) {
   //1: new, 2: order_accept, 3: order_delivered, 4: cancel, 5: order declined
-  switch (mObj.orderStatus) {
-    case 1:
+  switch (mObj.statusSupplier) {
+   case 'CONFIRMED':
       return Colors.blue;
-    case 2:
+    case 'UNCONFIRMED':
+      return Colors.blue;
+    case 'PREPARE':
       return Colors.green;
-    case 3:
-      return Colors.green;
-    case 4:
-      return Colors.green;
-    case 5:
-      return Colors.green;
-    case 6:
+    case 'ON_DELIVERY':
       return Colors.red;
+    case 'CANCEL':
+      return Colors.red;
+    case 'DELIVERED':
+      return Colors.green;
     default:
-      return TColor.primary;
+      return Colors.white;
   }
 }
 
-String getNextStatusText(OrderModel mObj) {
-  switch (mObj.orderStatus) {
-    case 1:
-      return "Accept";
-    case 2:
-      return "Process";
-    case 3:
-      return "Deliver";
-    case 4:
-      return "Delivered";
-    case 5:
-      return ""; // Đây là trạng thái cuối cùng, không có trạng thái tiếp theo
-    case 6:
-      return ""; // Đơn hàng đã bị hủy, không có trạng thái tiếp theo
+String getNextStatusText(OrderModelNew mObj) {
+  switch (mObj.statusSupplier) {
+     case 'CONFIRMED':
+      return 'CONFIRMED';
+    case 'UNCONFIRMED':
+      return 'UNCONFIRMED';
+    case 'PREPARE':
+      return 'PREPARE';
+    case 'ON_DELIVERY':
+      return 'ON_DELIVERY';
+    case 'CANCEL':
+      return 'CANCEL';
+    case 'DELIVERED':
+      return 'DELIVERED';
     default:
-      return "";
+      return '';
   }
 }

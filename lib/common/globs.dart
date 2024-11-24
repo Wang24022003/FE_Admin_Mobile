@@ -175,7 +175,7 @@ class SVKey {
   //admin
   static const adminUrl = '$mainUrl/api/admin/';
 
-  static const newOrdersList = '${adminUrl}new_orders_list';
+  static const newOrdersList = '${baseUrl}receipt/admin';
   static const completedOrdersList = '${adminUrl}completed_orders_list';
   static const cancelDeclineOrdersList =
       '${adminUrl}cancel_decline_orders_list';
@@ -201,13 +201,13 @@ class SVKey {
   static const svDeleteCategory = '${adminUrl}product_category_delete';
 
   static const svGetSalesData = '${adminUrl}sales_summary';
-  static const svGetNewOrders = '${adminUrl}new_orders_list';
-  static const svGetCompletedOrders = '${adminUrl}completed_orders_list';
-  static const svGetAcceptedOrders = '${adminUrl}accepted_orders_list';
-  static const svGetProcessingOrders = '${adminUrl}processing_orders_list';
-  static const svGetDeliveringOrders = '${adminUrl}delivering_orders_list';
-  static const svGetCanceledOrders = '${adminUrl}canceled_orders_list';
-  static const svOrderStatusChange = '${adminUrl}order_status_change';
+  static const svGetNewOrders = '${baseUrl}receipts/admin?statusSupplier=UNCONFIRMED';
+  static const svGetCompletedOrders = '${baseUrl}receipts/admin?statusSupplier=DELIVERED';
+  static const svGetAcceptedOrders = '${baseUrl}receipts/admin?statusSupplier=CONFIRMED';
+  static const svGetProcessingOrders = '${baseUrl}receipts/admin?statusSupplier=PREPARE';
+  static const svGetDeliveringOrders = '${baseUrl}receipts/admin?statusSupplier=ON_DELIVERY';
+  static const svGetCanceledOrders = '${baseUrl}receipts/admin?statusSupplier=CANCEL';
+  static const svOrderStatusChange = '${baseUrl}receipts/status';
   static const svAdminOrderDetail = '${adminUrl}order_detail';
   static const svTotalOrderSummary = '${adminUrl}total_order_summary';
   static const svTotalPriceSummary = '${adminUrl}total_price_summary';

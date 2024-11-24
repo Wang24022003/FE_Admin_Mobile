@@ -41,7 +41,7 @@ class CategoryDetailViewModel extends GetxController {
           categoryDetails.value = categoryDetailsDataList;
           print("Category Details: $categoryDetails");
         } else {
-          Get.snackbar(Globs.appName, "Failed to fetch category details");
+          //Get.snackbar(Globs.appName, "Failed to fetch category details");
         }
       },
       failure: (err) async {
@@ -95,7 +95,7 @@ class CategoryDetailViewModel extends GetxController {
           didDone();
           fetchCategoryDetails();
         } else {
-          Get.snackbar(Globs.appName, "Failed to create category detail");
+          //Get.snackbar(Globs.appName, "Failed to create category detail");
         }
       },
       failure: (err) async {
@@ -137,7 +137,7 @@ class CategoryDetailViewModel extends GetxController {
           didDone();
           fetchCategoryDetails();
         } else {
-          Get.snackbar(Globs.appName, "Failed to update category detail");
+          //Get.snackbar(Globs.appName, "Failed to update category detail");
         }
       },
       failure: (err) async {
@@ -159,7 +159,7 @@ class CategoryDetailViewModel extends GetxController {
           Get.snackbar(Globs.appName, resObj[KKey.message].toString());
           fetchCategoryDetails();
         } else {
-          Get.snackbar(Globs.appName, "Failed to delete category detail");
+          //Get.snackbar(Globs.appName, "Failed to delete category detail");
         }
       },
       failure: (err) async {

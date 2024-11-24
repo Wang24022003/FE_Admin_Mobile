@@ -33,7 +33,7 @@ class UserManagementViewModel extends GetxController {
           print("NAMANMAANM $userList");
         } else {
           // Xử lý trường hợp không thành công
-          Get.snackbar(Globs.appName, "Failed to fetch sales data");
+          //Get.snackbar(Globs.appName, "Failed to fetch sales data");
         }
       },
       failure: (err) async {

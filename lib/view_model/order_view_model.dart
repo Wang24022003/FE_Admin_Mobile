@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model_new.dart';
 
 import '../common/globs.dart';
 import '../common/service_call.dart';
 
 class OrderViewModel extends GetxController {
-  final RxList<OrderModel> neworderList = <OrderModel>[].obs;
-  final RxList<OrderModel> completedorderList = <OrderModel>[].obs;
-  final RxList<OrderModel> acceptedOrderList = <OrderModel>[].obs;
-  final RxList<OrderModel> processingOrderList = <OrderModel>[].obs;
-  final RxList<OrderModel> deliveringOrderList = <OrderModel>[].obs;
-  final RxList<OrderModel> canceledOrderList = <OrderModel>[].obs;
+  final RxList<OrderModelNew> neworderList = <OrderModelNew>[].obs;
+  final RxList<OrderModelNew> completedorderList = <OrderModelNew>[].obs;
+  final RxList<OrderModelNew> acceptedOrderList = <OrderModelNew>[].obs;
+  final RxList<OrderModelNew> processingOrderList = <OrderModelNew>[].obs;
+  final RxList<OrderModelNew> deliveringOrderList = <OrderModelNew>[].obs;
+  final RxList<OrderModelNew> canceledOrderList = <OrderModelNew>[].obs;
 
   final isLoading = false.obs;
 
@@ -19,174 +20,239 @@ class OrderViewModel extends GetxController {
   void onInit() {
     super.onInit();
   }
-
+//placed
   void getNewOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetNewOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          neworderList.value = orderDataList;
-          print("Order List: $neworderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetNewOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        neworderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void getCompletedOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetCompletedOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          completedorderList.value = orderDataList;
-          print("Order List: $completedorderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetCompletedOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        completedorderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void getAcceptedOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetAcceptedOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          acceptedOrderList.value = orderDataList;
-          print("Accepted Order List: $acceptedOrderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch accepted order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetAcceptedOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        acceptedOrderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void getProcessingOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetProcessingOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          processingOrderList.value = orderDataList;
-          print("Processing Order List: $processingOrderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch processing order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetProcessingOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        processingOrderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void getDeliveringOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetDeliveringOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          deliveringOrderList.value = orderDataList;
-          print("Delivering Order List: $deliveringOrderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch delivering order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetDeliveringOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        deliveringOrderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void getCanceledOrderData() async {
-    Globs.showHUD();
-    ServiceCall.post(
-      {},
-      SVKey.svGetCanceledOrders,
-      isToken: true,
-      withSuccess: (resObj) async {
-        Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
-          var orderDataList = (resObj[KKey.payload] as List? ?? []).map((obj) {
-            return OrderModel.fromJson(obj);
-          }).toList();
-          canceledOrderList.value = orderDataList;
-          print("Canceled Order List: $canceledOrderList");
-        } else {
-          Get.snackbar(Globs.appName, "Failed to fetch canceled order data");
-        }
-      },
-      failure: (err) async {
-        Globs.hideHUD();
-        Get.snackbar(Globs.appName, err.toString());
-      },
-    );
-  }
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetCanceledOrders,
+    isToken: true,
+    withSuccess: (resObj) async {
+      Globs.hideHUD();
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+          print('Đối tượng JSON: $obj');
+          return OrderModelNew.fromJson(obj);
+        }).toList();
+
+        // Gán giá trị cho danh sách neworderList
+        canceledOrderList.value = orderDataList;
+
+      } else {
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
+      }
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      Get.snackbar(Globs.appName, err.toString());
+    },
+  );
+}
 
   void updateOrderStatus({
     required String orderId,
-    required String userId,
-    required int orderStatus,
+    
+    required String orderStatus,
   }) async {
     Globs.showHUD();
-    ServiceCall.post(
+    ServiceCall.patch(
       {
-        'order_id': orderId,
-        'user_id': userId,
-        'order_status': orderStatus.toString(),
+        '_id': orderId,
+        'statusSupplier': orderStatus,
       },
       SVKey.svOrderStatusChange,
       isToken: true,
       withSuccess: (resObj) async {
         Globs.hideHUD();
-        if (resObj[KKey.status] == "1") {
+        if (resObj['data']) {
           getNewOrderData();
           getCompletedOrderData();
           getAcceptedOrderData();

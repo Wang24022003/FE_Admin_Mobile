@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common/color_extension.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/order_management_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/order_management/order_detail_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/order_management/order_row.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/order_view_model.dart';
@@ -63,17 +64,17 @@ class _OrderListViewState extends State<OrderListView> {
   String _getTabText(int index) {
     switch (index) {
       case 1:
-        return "Placed";
+        return "UNCONFIRMED ";
       case 2:
-        return "Accepted";
+        return "CONFIRMED";
       case 3:
-        return "Processing";
+        return "PREPARE ";
       case 4:
-        return "Delivering";
+        return "ON_DELIVERY ";
       case 5:
-        return "Delivered";
+        return "DELIVERED ";
       case 6:
-        return "Canceled";
+        return "CANCEL";
       default:
         return "";
     }
@@ -112,7 +113,7 @@ class _OrderListState extends State<OrderList> {
   final orderVM = Get.put(OrderViewModel());
 
   // Hàm callback để cập nhật trạng thái
-  void _updateOrderStatus(OrderModel mObj) {
+  void _updateOrderStatus(OrderModelNew mObj) {
     // Cập nhật trạng thái ở đây, ví dụ:
     // orderVM.updateOrderStatus(
     //   orderId: mObj.orderId ?? "",
@@ -151,7 +152,7 @@ class _OrderListState extends State<OrderList> {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        List<OrderModel> orders = [];
+        List<OrderModelNew> orders = [];
         switch (widget.type) {
           case OrderListType.placed:
             orders = orderVM.neworderList;

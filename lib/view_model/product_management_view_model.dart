@@ -76,7 +76,7 @@ class ProductManagementViewModel extends GetxController {
           productDetails.value = productDetailsDataList;
           print("Product Details: $productDetails");
         } else {
-          Get.snackbar(Globs.appName, "Failed to fetch product details");
+          //Get.snackbar(Globs.appName, "Failed to fetch product details");
         }
       },
       failure: (err) async {

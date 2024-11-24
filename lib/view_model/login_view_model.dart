@@ -46,13 +46,19 @@ class LoginViewModel extends GetxController {
         // "access_token": ""
       }, SVKey.svLogin, withSuccess: (resObj) async {
         Globs.hideHUD();
+
         var data = resObj["data"];
+
         if( data  != null) {
        
           Map<String, dynamic>  payload = resObj[KKey.payload] as Map<String, dynamic> ? ?? {};
+
           Globs.udSet(payload, Globs.userPayload);
           Globs.udBoolSet(true, Globs.userLogin);
-          
+          var token = data["access_token"];
+          Globs.saveAuthToken(token);
+          var x = Globs.udValueString('auth_token');
+          print('token ==== ${x}');
           Get.delete<LoginViewModel>();
           Get.find<SplashViewModel>().goAfterLoginMainTab();
           

@@ -36,7 +36,7 @@ class TypeViewModel extends GetxController {
           types.value = typesDataList;
           print("Types: $types");
         } else {
-          Get.snackbar(Globs.appName, "Failed to fetch types");
+          //Get.snackbar(Globs.appName, "Failed to fetch types");
         }
       },
       failure: (err) async {
@@ -149,7 +149,7 @@ class TypeViewModel extends GetxController {
           Get.snackbar(Globs.appName, resObj[KKey.message].toString());
           fetchTypes();
         } else {
-          Get.snackbar(Globs.appName, "Failed to delete type");
+          //Get.snackbar(Globs.appName, "Failed to delete type");
         }
       },
       failure: (err) async {

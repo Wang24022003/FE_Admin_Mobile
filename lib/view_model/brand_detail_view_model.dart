@@ -36,7 +36,7 @@ class BrandDetailViewModel extends GetxController {
           brandDetails.value = brandDetailsDataList;
           print("Brand Details: $brandDetails");
         } else {
-          Get.snackbar(Globs.appName, "Failed to fetch brand details");
+          ////Get.snackbar(Globs.appName, "Failed to fetch brand details");
         }
       },
       failure: (err) async {
@@ -113,7 +113,7 @@ class BrandDetailViewModel extends GetxController {
           Get.snackbar(Globs.appName, resObj[KKey.message].toString());
           fetchBrandDetails();
         } else {
-          Get.snackbar(Globs.appName, "Failed to delete brand detail");
+          ////Get.snackbar(Globs.appName, "Failed to delete brand detail");
         }
       },
       failure: (err) async {
