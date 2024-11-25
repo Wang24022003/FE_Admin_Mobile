@@ -32,8 +32,9 @@ class SplashViewModel extends GetxController {
   }
 
   void logout() {
-    userPayload.value = UserPayloadModel();
-    Globs.udBoolSet(false, Globs.userLogin);
-    Get.to(() => const WelcomeView());
-  }
+  userPayload.value = UserPayloadModel();
+  Globs.udBoolSet(false, Globs.userLogin);
+  Get.offAll(() => const WelcomeView()); // Điều hướng xóa toàn bộ lịch sử
+}
+
 }

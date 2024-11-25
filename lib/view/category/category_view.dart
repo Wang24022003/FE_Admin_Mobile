@@ -77,7 +77,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  color: categoryDetail.color ?? Colors.white,
+                  color:  Colors.white,
                   child: ListTile(
                     contentPadding: EdgeInsets.all(16),
                     leading: Container(
@@ -86,13 +86,13 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8.0),
                         image: DecorationImage(
-                          image: NetworkImage(categoryDetail.image ?? ''),
+                          image: NetworkImage(''),
                           fit: BoxFit.contain,
                         ),
                       ),
                     ),
                     title: Text(
-                      categoryDetail.catName ?? 'Unknown Category',
+                      categoryDetail.name ?? 'Unknown Category',
                       style: TextStyle(fontSize: 18),
                     ),
                     trailing: Row(
@@ -122,7 +122,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView> {
                           onPressed: () {
                             // Implement delete function if needed
                             categoryDetailVM
-                                .deleteCategoryDetail(categoryDetail.catId!);
+                                .deleteCategoryDetail(categoryDetail.id!);
                           },
                         ),
                       ],

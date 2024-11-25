@@ -3,12 +3,15 @@ import 'package:flutter/services.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/brand/brand_detail_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/category/category_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/home/home_view.dart';
+import 'package:online_groceries_shop_app_flutter_admin/view/login/welcome_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/notification/notification_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/order_management/orders_management.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/product/product_list_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/product/product_add_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/type/type_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/user/user_list_view.dart';
+import 'package:get/get.dart';
+import 'package:online_groceries_shop_app_flutter_admin/view_model/splash_view_model.dart';
 
 import '../../common/color_extension.dart';
 
@@ -21,6 +24,9 @@ class MainTabView extends StatefulWidget {
 
 class _MainTabViewState extends State<MainTabView>
     with SingleTickerProviderStateMixin {
+
+      final splashViewModel = Get.put(SplashViewModel());
+
   TabController? controller;
   int selectTab = 0;
   // final favVM = Get.put(FavoriteViewModel());
@@ -30,14 +36,20 @@ class _MainTabViewState extends State<MainTabView>
     super.initState();
 
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-    controller = TabController(length: 6, vsync: this);
+    controller = TabController(length: 7, vsync: this);
     controller?.addListener(() {
       selectTab = controller?.index ?? 0;
-
-      if (selectTab == 3) {
-        // favVM.serviceCalList();
-      }
+      print("select tab === $selectTab");
+      // if (selectTab == 3) {
+      //   // favVM.serviceCalList();
+      // }
+      // setState(() {});
+      if (selectTab == 5) {
+        splashViewModel.logout();
+     
+    } else {
       setState(() {});
+    }
     });
   }
 
@@ -55,8 +67,9 @@ class _MainTabViewState extends State<MainTabView>
         ProductListView(),
         OrderListView(),
         UserListView(),
-        NotificationListView(),
+        // NotificationListView(),
         CategoryDetailView(),
+       
       ]),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
@@ -121,14 +134,14 @@ class _MainTabViewState extends State<MainTabView>
                     color: selectTab == 3 ? TColor.primary : TColor.primaryText,
                   ),
                 ),
-                Tab(
-                  text: "Notifications",
-                  icon: Icon(
-                    Icons.notification_add,
-                    size: 25,
-                    color: selectTab == 4 ? TColor.primary : TColor.primaryText,
-                  ),
-                ),
+                // Tab(
+                //   text: "Notifications",
+                //   icon: Icon(
+                //     Icons.notification_add,
+                //     size: 25,
+                //     color: selectTab == 4 ? TColor.primary : TColor.primaryText,
+                //   ),
+                // ),
                 Tab(
                     text: "Categories",
                     icon: Icon(
@@ -136,7 +149,17 @@ class _MainTabViewState extends State<MainTabView>
                       size: 25,
                       color:
                           selectTab == 5 ? TColor.primary : TColor.primaryText,
-                    )),
+                    )
+                  ),
+                    Tab(
+                    text: "Logout",
+                    icon: Icon(
+                      Icons.logout,
+                      size: 25,
+                      color:
+                          selectTab == 6 ? TColor.primary : TColor.primaryText,
+                    )
+                  ),
               ]),
         ),
       ),

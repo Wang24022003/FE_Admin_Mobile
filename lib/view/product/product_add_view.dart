@@ -196,25 +196,44 @@ class _AddProductScreenState extends State<AddProductScreen> {
       ),
     );
   }
-
-  void getCategoryList() {
-    Globs.showHUD();
-    ServiceCall.post({}, SVKey.svGetCategoryList, isToken: true,
-        withSuccess: (resObj) async {
+  
+  void getCategoryList() async {
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetCategoryList,
+    isToken: true,
+    withSuccess: (resObj) async {
       Globs.hideHUD();
-      if ((resObj[KKey.status] as String? ?? "") == "1") {
-        categoryArr = resObj[KKey.payload] as List? ?? [];
+
+      // Lấy data từ response
+      var data = resObj['data'];
+
+      // Kiểm tra tính hợp lệ của data
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
+        var orderDataList = result.map((obj) {
+         
+          //return OrderModelNew.fromJson(obj);
+        }).toList();
         setState(() {});
+        // Gán giá trị cho danh sách neworderList
+        categoryArr = orderDataList;
+
       } else {
-        // Handle API error
+        // Nếu không hợp lệ, hiển thị thông báo lỗi
         categoryArr = [];
+        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
       }
-      setState(() {});
-    }, failure: (err) async {
+      
+    },
+    failure: (err) async {
       mdShowAlert("Error", err, () {});
       // Show error message
     });
-  }
+}
+
 
   void submitProductAction() {
     if (selectCateObj == null) {

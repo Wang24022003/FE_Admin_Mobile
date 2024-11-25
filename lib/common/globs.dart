@@ -195,10 +195,10 @@ class SVKey {
   static const svUpdateType = '${adminUrl}product_type_update';
   static const svDeleteType = '${adminUrl}product_type_delete';
 
-  static const svGetCategoryList = '${adminUrl}product_category_list';
-  static const svCreateCategory = '${adminUrl}product_category_add';
-  static const svUpdateCategory = '${adminUrl}product_category_update';
-  static const svDeleteCategory = '${adminUrl}product_category_delete';
+  static const svGetCategoryList = '${baseUrl}categories?current=1&pageSize=11111';
+  static const svCreateCategory = '${baseUrl}categories';
+  static const svUpdateCategory = '${baseUrl}categories';
+  static const svDeleteCategory = '${baseUrl}categories';
 
   static const svGetSalesData = '${adminUrl}sales_summary';
   static const svGetNewOrders = '${baseUrl}receipts/admin?statusSupplier=UNCONFIRMED';
