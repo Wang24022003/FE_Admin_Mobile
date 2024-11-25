@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common/color_extension.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/user_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/user_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/user_management_view_model.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -107,7 +108,7 @@ class _UserListViewState extends State<UserListView> {
               ),
               title: Row(
                 children: [
-                  Text(user.username.toString() ?? 'Unknown User',
+                  Text(user.name.toString() ?? 'Unknown User',
                       style: TextStyle(fontSize: 18)),
                   SizedBox(width: 10),
                 ],
@@ -117,7 +118,7 @@ class _UserListViewState extends State<UserListView> {
                 children: [
                   Text(user.email.toString() ?? ''),
                   Text(
-                    'Created at: ${user.createdDate != null ? user.createdDate!.toLocal().toString() : 'N/A'}',
+                    'Created at: ${user.createdAt != null ? user.createdAt.toString() : 'N/A'}',
                     style: TextStyle(fontSize: 12),
                   ),
                 ],
@@ -135,7 +136,7 @@ class _UserListViewState extends State<UserListView> {
     );
   }
 
-  Widget _buildUserListItem(UserModel user) {
+  Widget _buildUserListItem(UserModelNew user) {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.grey),
@@ -157,7 +158,7 @@ class _UserListViewState extends State<UserListView> {
         ),
         title: Row(
           children: [
-            Text(user.username.toString() ?? 'Unknown User',
+            Text(user.name.toString() ?? 'Unknown User',
                 style: TextStyle(fontSize: 18)),
             SizedBox(width: 10),
           ],
@@ -167,7 +168,7 @@ class _UserListViewState extends State<UserListView> {
           children: [
             Text(user.email.toString() ?? ''),
             Text(
-              'Created at: ${user.createdDate != null ? user.createdDate!.toLocal().toString() : 'N/A'}',
+              'Created at: ${user.createdAt != null ? user.createdAt!.toLocal().toString() : 'N/A'}',
               style: TextStyle(fontSize: 12),
             ),
           ],

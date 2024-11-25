@@ -212,8 +212,8 @@ class SVKey {
   static const svTotalOrderSummary = '${adminUrl}total_order_summary';
   static const svTotalPriceSummary = '${adminUrl}total_price_summary';
 
-  static const svGetUserList = '${adminUrl}user_list';
-  static const svDeleteUser = '${adminUrl}user_delete';
+  static const svGetUserList = '${baseUrl}users?current=1&pageSize=111111';
+  static const svDeleteUser = '${baseUrl}user_delete';
   static const svGetNotificationReviewList = '${adminUrl}notification_list';
   static const svTop10Product = '${adminUrl}home_best_selling';
 }
