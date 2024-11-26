@@ -18,7 +18,7 @@ class LoginViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("LoginViewModel Init ");
+      // print("LoginViewModel Init ");
     }
     txtEmail.value.text = "uyenbao4a5@gmail.com";
     txtPassword.value.text = "123456";
@@ -57,8 +57,8 @@ class LoginViewModel extends GetxController {
           Globs.udBoolSet(true, Globs.userLogin);
           var token = data["access_token"];
           Globs.saveAuthToken(token);
-          var x = Globs.udValueString('auth_token');
-          print('token ==== ${x}');
+          // var x = Globs.udValueString('auth_token');
+          // print('token ==== ${x}');
           Get.delete<LoginViewModel>();
           Get.find<SplashViewModel>().goAfterLoginMainTab();
           

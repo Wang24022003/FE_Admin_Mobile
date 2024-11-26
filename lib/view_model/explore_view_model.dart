@@ -18,7 +18,7 @@ class ExploreViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("ExploreViewModel Init ");
+      // print("ExploreViewModel Init ");
     }
 
     serviceCallList();

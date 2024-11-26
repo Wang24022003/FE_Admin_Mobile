@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:get/get.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common/color_extension.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/product/product_add_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/product/product_edit_view.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view/product/review/review_view.dart';
@@ -97,7 +98,7 @@ class _ProductListViewState extends State<ProductListView> {
     );
   }
 
-  Widget _buildProductItem(ProductDetailModel productDetail) {
+  Widget _buildProductItem(ProductDetailModelNew productDetail) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         vertical: 8.0,
@@ -107,7 +108,7 @@ class _ProductListViewState extends State<ProductListView> {
         onTap: () async {
           Navigator.of(context).push(MaterialPageRoute(
             builder: (context) => ReviewListView(
-              prodId: productDetail.prodId.toString(),
+              prodId: productDetail.id.toString(),
             ),
           ));
         },
@@ -127,7 +128,7 @@ class _ProductListViewState extends State<ProductListView> {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: CachedNetworkImage(
-                  imageUrl: productDetail.image ?? '',
+                  imageUrl: productDetail.images?[0] ?? '',
                   fit: BoxFit.contain,
                   placeholder: (context, url) =>
                       Center(child: CircularProgressIndicator()),
@@ -153,7 +154,7 @@ class _ProductListViewState extends State<ProductListView> {
                             ),
                             // Add some spacing between text and buttons
                             Text(
-                              'Quantity: ${productDetail.unitValue.toString() ?? 'N/A'}',
+                              'Quantity: ${productDetail.quantity.toString() ?? 'N/A'}',
                             ),
                             Text(
                               'Price: \$${productDetail.price ?? 0}',
@@ -180,7 +181,7 @@ class _ProductListViewState extends State<ProductListView> {
                               ),
                               onPressed: () {
                                 // Implement delete function if needed
-                                productManagementVM.deleteProduct(productDetail.prodId!);
+                                productManagementVM.deleteProduct(productDetail.id!);
                               },
                             ),
                           ],

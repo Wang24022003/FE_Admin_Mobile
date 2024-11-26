@@ -66,7 +66,7 @@ class CartItemModel {
     detail = json['detail'];
     unitName = json['unit_name'];
     unitValue = json['unit_value'];
-    nutritionWeight = json['nutrition_weight'];
+    nutritionWeight = json['quantity'];
     price = json['price'];
     createdDate = json['created_date'];
     modifyDate = json['modify_date'];
@@ -96,7 +96,7 @@ class CartItemModel {
     data['detail'] = detail;
     data['unit_name'] = unitName;
     data['unit_value'] = unitValue;
-    data['nutrition_weight'] = nutritionWeight;
+    data['quantity'] = nutritionWeight;
     data['price'] = price;
     data['created_date'] = createdDate;
     data['modify_date'] = modifyDate;

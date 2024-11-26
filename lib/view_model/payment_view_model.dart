@@ -21,7 +21,7 @@ class PaymentViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("PaymentViewModel Init ");
+      // print("PaymentViewModel Init ");
     }
 
     serviceCallList();

@@ -14,18 +14,19 @@ typedef ResFailure = Future<void> Function(dynamic);
 class ServiceCall {
   static void post(Map<String, dynamic> parameter, String path,
       {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
-    Future(()async {
+    Future(() async {
       try {
-         String? token = await Globs.getAuthToken(); // Lấy token
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        if (token != null) 'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
-      };
+        String? token = await Globs.getAuthToken(); // Lấy token
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
         http
             .post(Uri.parse(path), body: parameter, headers: headers)
             .then((value) {
           if (kDebugMode) {
-            print(value.body);
+            // print(value.body);
           }
           try {
             var jsonObj =
@@ -43,22 +44,25 @@ class ServiceCall {
       }
     });
   }
+
   static void patch(Map<String, dynamic> parameter, String path,
       {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
-    Future(() async{
+    Future(() async {
       try {
         String? token = await Globs.getAuthToken(); // Lấy token
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        if (token != null) 'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
-      };
-      
+
+
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
 
         http
             .patch(Uri.parse(path), body: parameter, headers: headers)
             .then((value) {
           if (kDebugMode) {
-            print(value.body);
+            // print(value.body);
           }
           try {
             var jsonObj =
@@ -76,23 +80,25 @@ class ServiceCall {
       }
     });
   }
-  
+
+
+
   static void delete(Map<String, dynamic> parameter, String path,
       {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
-    Future(() async{
+    Future(() async {
       try {
         String? token = await Globs.getAuthToken(); // Lấy token
-      var headers = {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        if (token != null) 'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
-      };
-      
+        var headers = {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
 
         http
             .delete(Uri.parse(path), body: parameter, headers: headers)
             .then((value) {
           if (kDebugMode) {
-            print(value.body);
+            // print(value.body);
           }
           try {
             var jsonObj =
@@ -110,39 +116,38 @@ class ServiceCall {
       }
     });
   }
-  
-  static void get(String path, 
-    {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
-  Future(() async {
-    try {
-      String? token = await Globs.getAuthToken(); // Lấy token
-      var headers = {
-        'Content-Type': 'application/json',
-        if (token != null) 'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
-      };
-      
-      http
-          .get(Uri.parse(path), headers: headers)
-          .then((value) {
-        if (kDebugMode) {
-          print(value.body); // Log response
-        }
 
-        try {
-          var jsonObj = json.decode(value.body) as Map<String, dynamic>? ?? {};
-          if (withSuccess != null) withSuccess(jsonObj);
-        } catch (err) {
-          if (failure != null) failure(err.toString());
-        }
-      }).catchError((e) {
-        if (failure != null) failure(e.toString());
-      });
-    } catch (err) {
-      if (failure != null) failure(err.toString());
-    }
-  });
-}
+  static void get(String path,
+      {bool isToken = false, ResSuccess? withSuccess, ResFailure? failure}) {
+    Future(() async {
+      try {
+        String? token = await Globs.getAuthToken(); // Lấy token
+        var headers = {
+          'Content-Type': 'application/json',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
 
+        http.get(Uri.parse(path), headers: headers).then((value) {
+          if (kDebugMode) {
+            // print(value.body); // Log response
+          }
+
+          try {
+            var jsonObj =
+                json.decode(value.body) as Map<String, dynamic>? ?? {};
+            if (withSuccess != null) withSuccess(jsonObj);
+          } catch (err) {
+            if (failure != null) failure(err.toString());
+          }
+        }).catchError((e) {
+          if (failure != null) failure(e.toString());
+        });
+      } catch (err) {
+        if (failure != null) failure(err.toString());
+      }
+    });
+  }
 
   static void multipart(Map<String, String> parameter, String path,
       {bool isTokenApi = false,
@@ -161,9 +166,9 @@ class ServiceCall {
         }
 
         if (kDebugMode) {
-          print('Service Call: $path');
-          print('Service para: ${parameter.toString()}');
-          print('Service header: ${request.headers.toString()}');
+          // print('Service Call: $path');
+          // print('Service para: ${parameter.toString()}');
+          // print('Service header: ${request.headers.toString()}');
         }
 
         if (imgObj != null) {

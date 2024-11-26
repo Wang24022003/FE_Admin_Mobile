@@ -38,7 +38,7 @@ class UserManagementViewModel extends GetxController {
           
       }
         else {
-          Get.snackbar(Globs.appName, "Failed to fetch category details");
+          Get.snackbar(Globs.appName, "Failed to fetch user details");
         }
       
         

@@ -2,9 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common/color_extension.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model_new.dart';
 
 class OrderItemRow extends StatelessWidget {
-  final ProductDetailModel pObj;
+  final ProductDetailModelNew pObj;
   final bool
       allowReview; // Tham số boolean cho phép kiểm tra trạng thái đơn hàng
 
@@ -32,7 +33,7 @@ class OrderItemRow extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CachedNetworkImage(
-                  imageUrl: pObj.image ?? "",
+                  imageUrl: pObj.images?[0] ?? "",
                   placeholder: (context, url) => const Center(
                     child: CircularProgressIndicator(),
                   ),
@@ -59,7 +60,7 @@ class OrderItemRow extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        "${pObj.unitValue}${pObj.unitName} Price",
+                        "${pObj.price}${pObj.price} Price",
                         style: TextStyle(
                             color: TColor.secondaryText,
                             fontSize: 14,
@@ -81,7 +82,8 @@ class OrderItemRow extends StatelessWidget {
                             width: 15,
                           ),
                           Text(
-                            (pObj.qty ?? 0).toString(),
+                            (pObj.quantity ?? 0).toString(),
+                            
                             style: TextStyle(
                                 color: TColor.primaryText,
                                 fontSize: 16,
@@ -101,7 +103,7 @@ class OrderItemRow extends StatelessWidget {
                             width: 8,
                           ),
                           Text(
-                            "\$${(pObj.itemPrice ?? 0).toStringAsFixed(2)}",
+                            "\$${(pObj.price ?? 0).toStringAsFixed(2)}",
                             style: TextStyle(
                                 color: TColor.primaryText,
                                 fontSize: 16,
@@ -109,7 +111,7 @@ class OrderItemRow extends StatelessWidget {
                           ),
                           const Spacer(),
                           Text(
-                            "\$${(pObj.totalPrice ?? 0).toStringAsFixed(2)}",
+                            "\$${(pObj.price ?? 0).toStringAsFixed(2)}",
                             style: TextStyle(
                                 color: TColor.primaryText,
                                 fontSize: 18,

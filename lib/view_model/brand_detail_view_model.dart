@@ -15,7 +15,7 @@ class BrandDetailViewModel extends GetxController {
   void onInit() {
     super.onInit();
     if (kDebugMode) {
-      print("Brand Detail Init ");
+      // print("Brand Detail Init ");
     }
     fetchBrandDetails();
   }
@@ -34,7 +34,7 @@ class BrandDetailViewModel extends GetxController {
             return BrandDetailModel.fromJson(obj);
           }).toList();
           brandDetails.value = brandDetailsDataList;
-          print("Brand Details: $brandDetails");
+          // print("Brand Details: $brandDetails");
         } else {
           ////Get.snackbar(Globs.appName, "Failed to fetch brand details");
         }

@@ -62,7 +62,7 @@ class ProductDetailModel {
     detail = json['detail'];
     unitName = json['unit_name'];
     unitValue = json['unit_value'];
-    nutritionWeight = json['nutrition_weight'];
+    nutritionWeight = json['quantity'];
     price = json['price'];
     itemPrice = json['item_price'];
     totalPrice = json['total_price'];
@@ -92,7 +92,7 @@ class ProductDetailModel {
     data['detail'] = detail;
     data['unit_name'] = unitName;
     data['unit_value'] = unitValue;
-    data['nutrition_weight'] = nutritionWeight;
+    data['quantity'] = nutritionWeight;
     data['price'] = price;
     data['item_price'] = itemPrice;
     data['total_price'] = totalPrice;

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,11 +12,16 @@ import 'package:online_groceries_shop_app_flutter_admin/common_widget/line_dropd
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/line_textfield.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/popup_layout.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/round_button.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/category_detail_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/product_management_view_model.dart';
 
+import 'package:http/http.dart' as http;
+
+
 class AddProductScreen extends StatefulWidget {
-  final ProductDetailModel? pObj;
+  final ProductDetailModelNew? pObj;
 
   const AddProductScreen({Key? key, this.pObj}) : super(key: key);
   @override
@@ -26,10 +32,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
   TextEditingController txtCatName = TextEditingController();
   TextEditingController txtProName = TextEditingController();
   TextEditingController txtDetail = TextEditingController();
-  TextEditingController txtUnitName = TextEditingController();
-  TextEditingController txtUnitValue = TextEditingController();
-  TextEditingController txtNutritionWeight = TextEditingController();
+  TextEditingController txtBrand = TextEditingController();
+  TextEditingController txtShopName = TextEditingController();
+  TextEditingController txtQuantity = TextEditingController();
   TextEditingController txtPrice = TextEditingController();
+  TextEditingController txtDiscount = TextEditingController();
   File? selectImage;
   List categoryArr = [];
 
@@ -86,19 +93,19 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 selectVal: selectCateObj,
                 didChanged: (cObj) {
                   selectCateObj = cObj;
-                  if (cObj["category_id"] == 0) {
+                  if (cObj["_id"] == 0) {
                     otherFlag = 1;
                   } else {
                     //getCategoryList();
                   }
                   setState(() {});
                 },
-                displayKey: "category_name",
+                displayKey: "name",
               ),
               const SizedBox(
                 height: 8,
               ),
-              if ((selectCateObj?["category_id"] as int? ?? -1) == 0)
+              if ((selectCateObj?["_id"] as int? ?? -1) == 0)
                 LineTextField(
                   title: "Enter Category",
                   placeholder: "Enter category name",
@@ -118,27 +125,35 @@ class _AddProductScreenState extends State<AddProductScreen> {
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Unit Name',
-                placeholder: 'Enter Unit Name',
-                controller: txtUnitName,
+                title: 'Brand',
+                placeholder: 'Enter Brand Name',
+                controller: txtBrand,
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Unit Value',
-                placeholder: 'Enter Unit Value',
-                controller: txtUnitValue,
+                title: 'Shop Name',
+                placeholder: 'Enter Shop Name',
+                controller: txtShopName,
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Nutrition Weight',
-                placeholder: 'Enter Nutrition Weight',
-                controller: txtNutritionWeight,
+                title: 'Quantity',
+                placeholder: 'Enter Quantity',
+                controller: txtQuantity,
+                 keyboardType: TextInputType.number, // Allow numeric input
               ),
               SizedBox(height: 16.0),
               LineTextField(
                 title: 'Price',
                 placeholder: 'Enter Price',
                 controller: txtPrice,
+                keyboardType: TextInputType.number, // Allow numeric input
+              ),
+              SizedBox(height: 16.0),
+              LineTextField(
+                title: 'Discount',
+                placeholder: 'Enter Discount',
+                controller: txtDiscount,
                 keyboardType: TextInputType.number, // Allow numeric input
               ),
               SizedBox(height: 24.0),
@@ -197,45 +212,50 @@ class _AddProductScreenState extends State<AddProductScreen> {
     );
   }
   
-  void getCategoryList() async {
+
+void getCategoryList() {
   Globs.showHUD();
   ServiceCall.get(
     SVKey.svGetCategoryList,
     isToken: true,
     withSuccess: (resObj) async {
       Globs.hideHUD();
-
-      // Lấy data từ response
+      categoryArr = [];
       var data = resObj['data'];
 
-      // Kiểm tra tính hợp lệ của data
       if (data is Map && data.containsKey('result') && data['result'] is List) {
         var result = data['result'] as List;
 
-        // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
-        var orderDataList = result.map((obj) {
-         
-          //return OrderModelNew.fromJson(obj);
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng CategoryDetailModelNew
+        var categoryDetailsDataList = result.map((obj) {
+          var tmp = CategoryDetailModelNew.fromJson(obj);
+          return {
+            'id': tmp.id,
+            'name': tmp.name,
+          };
         }).toList();
-        setState(() {});
-        // Gán giá trị cho danh sách neworderList
-        categoryArr = orderDataList;
 
+        // Gán giá trị cho danh sách categoryArr
+        categoryArr = categoryDetailsDataList;
       } else {
-        // Nếu không hợp lệ, hiển thị thông báo lỗi
+        // Xử lý lỗi nếu data không hợp lệ
         categoryArr = [];
-        Get.snackbar(Globs.appName, "Không tìm thấy dữ liệu đơn hàng mới");
       }
-      
+
+      // Cập nhật giao diện
+      setState(() {});
     },
     failure: (err) async {
+      Globs.hideHUD();
+      // Hiển thị thông báo lỗi
       mdShowAlert("Error", err, () {});
-      // Show error message
-    });
+    },
+  );
 }
 
 
-  void submitProductAction() {
+
+  void submitProductAction() async{
     if (selectCateObj == null) {
       mdShowAlert("Error", "Please select the category", () {});
       return;
@@ -256,23 +276,27 @@ class _AddProductScreenState extends State<AddProductScreen> {
       return;
     }
 
-    if (txtUnitName.text.isEmpty) {
+    if (txtBrand.text.isEmpty) {
       mdShowAlert("Error", "Please enter the unit name", () {});
       return;
     }
 
-    if (txtUnitValue.text.isEmpty) {
-      mdShowAlert("Error", "Please enter the unit value", () {});
+    if (txtShopName.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the Shop Name", () {});
       return;
     }
 
-    if (txtNutritionWeight.text.isEmpty) {
-      mdShowAlert("Error", "Please enter the nutrition weight", () {});
+    if (txtQuantity.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the Quantity", () {});
       return;
     }
 
     if (txtPrice.text.isEmpty) {
       mdShowAlert("Error", "Please enter the price", () {});
+      return;
+    }
+    if (txtDiscount.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the discount", () {});
       return;
     }
     if (selectImage == null) {
@@ -281,42 +305,85 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     endEditing();
-
-    submitProductApi({
-      "cat_id": otherFlag == 1
-          ? txtCatName.text
-          : selectCateObj!["cat_id"].toString(),
-      "brand_id": "2",
-      "type_id": "1",
-      "name": txtProName.text,
-      "detail": txtDetail.text,
-      "unit_name": txtUnitName.text,
-      "unit_value": txtUnitValue.text,
-      "nutrition_weight": txtNutritionWeight.text,
-      "price": txtPrice.text,
-      "nutrition_date":
-          '[{"name":"Calories","value":"100"},{"name":"Protein","value":"10g"}]',
-    });
+    var url = await  uploadFile();
+    print('url === $url');
+    Map<String, dynamic> parameters = {
+    "name": txtProName.text, // String
+    "category": otherFlag == 1
+        ? txtCatName.text // String
+        : selectCateObj?["id"], // String hoặc null
+    "brand": txtBrand.text, // String
+    "shopName": txtShopName.text, // String
+    "images": [url],
+    "quantity": int.parse(txtQuantity.text), // Chuyển sang int
+    "price": int.parse(txtPrice.text), // Chuyển sang int
+    "description": txtDetail.text, // String
+    "discount": int.parse(txtDiscount.text) , // Chuyển sang int
+    "_id": widget.pObj?.id ?? "" // String hoặc null
+  };
+    sendProductData(parameters);
   }
+ // Upload file
+Future<String?> uploadFile() async {
+  if (selectImage == null) return null;
 
-  void submitProductApi(Map<String, String> parameter) {
-    Globs.showHUD();
-    ServiceCall.multipart(parameter, SVKey.svCreateProduct,
-        isTokenApi: true,
-        imgObj: {"image": selectImage!}, withSuccess: (responseObj) async {
-      Globs.hideHUD();
-      if ((responseObj[KKey.status] ?? "") == "1") {
-        mdShowAlert("Success", responseObj[KKey.message] ?? MSG.success, () {
+  var uri = Uri.parse(SVKey.svUploadFile);
+  var request = http.MultipartRequest('PATCH', uri);
+
+  // Đính kèm file vào request
+  var file = await http.MultipartFile.fromPath('file', selectImage!.path);
+  request.files.add(file);
+
+  try {
+    // Gửi yêu cầu PATCH và chờ kết quả
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      // Đọc kết quả trả về từ stream
+      var value = await response.stream.transform(utf8.decoder).join();
+
+      // Giải mã JSON
+      var jsonObj = json.decode(value) as Map<String, dynamic>? ?? {};
+      var url = jsonObj["data"].toString();
+
+      return url; // Trả về URL của file
+    } else {
+      print('Error uploading file: ${response.statusCode}');
+      return null;
+    }
+  } catch (e) {
+    print('Error uploading file: $e');
+    return null;
+  }
+}
+
+
+
+
+Future<void> sendProductData(Map<String, dynamic> parameter) async {
+
+  String jsonString = json.encode(parameter);
+  String? token = await Globs.getAuthToken(); // Lấy token
+        var headers = {
+          'Content-Type': 'application/json',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
+  var response = await http.post(
+    Uri.parse( SVKey.svUpdateProduct),
+    headers: headers,
+    body: jsonString, // gửi dữ liệu dưới dạng JSON
+  );
+
+  if (response.statusCode == 201) {
+     mdShowAlert("Success", "Product create successfully", () {
           Navigator.pop(context);
         });
-      } else {
-        mdShowAlert("Error", responseObj[KKey.message] ?? MSG.fail, () {});
-      }
-    }, failure: (err) async {
-      Globs.hideHUD();
-      mdShowAlert("Error", err, () {});
-    });
+  } else {
+   mdShowAlert("Error", "Product create fail", () {});
   }
+}
+  
 }
 
 // END: abpxx6d04wxr

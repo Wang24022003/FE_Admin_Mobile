@@ -38,7 +38,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 
@@ -74,7 +74,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 
@@ -110,7 +110,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 
@@ -146,7 +146,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 
@@ -182,7 +182,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 
@@ -218,7 +218,7 @@ class OrderViewModel extends GetxController {
 
         // Chuyển đổi danh sách JSON thành danh sách đối tượng OrderModelNew
         var orderDataList = result.map((obj) {
-          print('Đối tượng JSON: $obj');
+          // print('Đối tượng JSON: $obj');
           return OrderModelNew.fromJson(obj);
         }).toList();
 

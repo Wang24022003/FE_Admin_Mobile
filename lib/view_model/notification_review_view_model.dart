@@ -32,7 +32,7 @@ class NotificationReviewViewModel extends GetxController {
             return NotificationReviewModel.fromJson(obj);
           }).toList();
           notificationList.value = DataList;
-          print("NAMANMAANM $notificationList");
+          // print("NAMANMAANM $notificationList");
         } else {
           // Xử lý trường hợp không thành công
           //Get.snackbar(Globs.appName, "Failed to fetch sales data");

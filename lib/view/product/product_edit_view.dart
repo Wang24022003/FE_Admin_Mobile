@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,11 +12,14 @@ import 'package:online_groceries_shop_app_flutter_admin/common_widget/line_dropd
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/line_textfield.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/popup_layout.dart';
 import 'package:online_groceries_shop_app_flutter_admin/common_widget/round_button.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/category_detail_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model.dart';
+import 'package:online_groceries_shop_app_flutter_admin/model/product_detail_model_new.dart';
 import 'package:online_groceries_shop_app_flutter_admin/view_model/product_management_view_model.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateProductScreen extends StatefulWidget {
-  final ProductDetailModel? pObj;
+  final ProductDetailModelNew? pObj;
 
   const UpdateProductScreen({Key? key, this.pObj}) : super(key: key);
   @override
@@ -26,10 +30,11 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   TextEditingController txtCatName = TextEditingController();
   TextEditingController txtProName = TextEditingController();
   TextEditingController txtDetail = TextEditingController();
-  TextEditingController txtUnitName = TextEditingController();
-  TextEditingController txtUnitValue = TextEditingController();
-  TextEditingController txtNutritionWeight = TextEditingController();
+  TextEditingController txtBrand = TextEditingController();
+  TextEditingController txtShopName = TextEditingController();
+  TextEditingController txtQuantity = TextEditingController();
   TextEditingController txtPrice = TextEditingController();
+  TextEditingController txtDiscount = TextEditingController();
   File? selectImage;
   List categoryArr = [];
 
@@ -43,13 +48,14 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
   void initState() {
     super.initState();
     final product = widget.pObj;
-    txtCatName.text = product?.catName ?? "";
+    txtCatName.text = product?.category ?? "";
     txtProName.text = product?.name ?? "";
-    txtDetail.text = product?.detail ?? "";
-    txtUnitName.text = product?.unitName ?? "";
-    txtUnitValue.text = product?.unitValue ?? "";
-    txtNutritionWeight.text = product?.nutritionWeight ?? "";
+    txtDetail.text = product?.description ?? "";
+    txtBrand.text = product?.brand ?? "";
+    txtShopName.text = product?.shopName ?? "";
+    txtQuantity.text = product?.quantity.toString() ?? "";
     txtPrice.text = product?.price.toString() ?? "";
+    txtDiscount.text = product?.discount.toString() ?? "";
     getCategoryList();
   }
 
@@ -94,19 +100,19 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
                 selectVal: selectCateObj,
                 didChanged: (cObj) {
                   selectCateObj = cObj;
-                  if (cObj["category_id"] == 0) {
+                  if (cObj["_id"] == 0) {
                     otherFlag = 1;
                   } else {
                     //getCategoryList();
                   }
                   setState(() {});
                 },
-                displayKey: "category_name",
+                displayKey: "name",
               ),
               const SizedBox(
                 height: 8,
               ),
-              if ((selectCateObj?["category_id"] as int? ?? -1) == 0)
+              if ((selectCateObj?["_id"] as int? ?? -1) == 0)
                 LineTextField(
                   title: "Enter Category",
                   placeholder: "Enter category name",
@@ -126,27 +132,36 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Unit Name',
-                placeholder: 'Enter Unit Name',
-                controller: txtUnitName,
+                title: 'Brand Name',
+                placeholder: 'Enter Brand Name',
+                controller: txtBrand,
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Unit Value',
-                placeholder: 'Enter Unit Value',
-                controller: txtUnitValue,
+                title: 'Shop Name',
+                placeholder: 'Enter Shop Name',
+                controller: txtShopName,
               ),
               SizedBox(height: 16.0),
               LineTextField(
-                title: 'Nutrition Weight',
-                placeholder: 'Enter Nutrition Weight',
-                controller: txtNutritionWeight,
+                title: 'Quantity',
+                placeholder: 'Enter Quantity',
+                controller: txtQuantity,
+                keyboardType: TextInputType.number, // Allow numeric input
+
               ),
               SizedBox(height: 16.0),
               LineTextField(
                 title: 'Price',
                 placeholder: 'Enter Price',
                 controller: txtPrice,
+                keyboardType: TextInputType.number, // Allow numeric input
+              ),
+              SizedBox(height: 16.0),
+              LineTextField(
+                title: 'Discount',
+                placeholder: 'Enter Discount',
+                controller: txtDiscount,
                 keyboardType: TextInputType.number, // Allow numeric input
               ),
               SizedBox(height: 25),
@@ -161,24 +176,46 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
     );
   }
 
-  void getCategoryList() {
-    Globs.showHUD();
-    ServiceCall.post({}, SVKey.svGetCategoryList, isToken: true,
-        withSuccess: (resObj) async {
+void getCategoryList() {
+  Globs.showHUD();
+  ServiceCall.get(
+    SVKey.svGetCategoryList,
+    isToken: true,
+    withSuccess: (resObj) async {
       Globs.hideHUD();
-      if ((resObj[KKey.status] as String? ?? "") == "1") {
-        categoryArr = resObj[KKey.payload] as List? ?? [];
-        setState(() {});
+      categoryArr = [];
+      var data = resObj['data'];
+
+      if (data is Map && data.containsKey('result') && data['result'] is List) {
+        var result = data['result'] as List;
+
+        // Chuyển đổi danh sách JSON thành danh sách đối tượng CategoryDetailModelNew
+        var categoryDetailsDataList = result.map((obj) {
+          var tmp = CategoryDetailModelNew.fromJson(obj);
+          return {
+            'id': tmp.id,
+            'name': tmp.name,
+          };
+        }).toList();
+
+        // Gán giá trị cho danh sách categoryArr
+        categoryArr = categoryDetailsDataList;
       } else {
-        // Handle API error
+        // Xử lý lỗi nếu data không hợp lệ
         categoryArr = [];
       }
+
+      // Cập nhật giao diện
       setState(() {});
-    }, failure: (err) async {
+    },
+    failure: (err) async {
+      Globs.hideHUD();
+      // Hiển thị thông báo lỗi
       mdShowAlert("Error", err, () {});
-      // Show error message
-    });
-  }
+    },
+  );
+}
+
 
   void submitProductAction() {
     if (selectCateObj == null) {
@@ -201,18 +238,18 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       return;
     }
 
-    if (txtUnitName.text.isEmpty) {
+    if (txtBrand.text.isEmpty) {
       mdShowAlert("Error", "Please enter the unit name", () {});
       return;
     }
 
-    if (txtUnitValue.text.isEmpty) {
-      mdShowAlert("Error", "Please enter the unit value", () {});
+    if (txtShopName.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the Shop Name", () {});
       return;
     }
 
-    if (txtNutritionWeight.text.isEmpty) {
-      mdShowAlert("Error", "Please enter the nutrition weight", () {});
+    if (txtQuantity.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the Quantity", () {});
       return;
     }
 
@@ -220,42 +257,51 @@ class _UpdateProductScreenState extends State<UpdateProductScreen> {
       mdShowAlert("Error", "Please enter the price", () {});
       return;
     }
+    if (txtDiscount.text.isEmpty) {
+      mdShowAlert("Error", "Please enter the price", () {});
+      return;
+    }
 
     endEditing();
-
-    submitProductApi({
-      "prod_id": widget.pObj!.prodId.toString(),
-      "name": txtProName.text,
-      "detail": txtDetail.text,
-      "cat_id": otherFlag == 1
-          ? txtCatName.text
-          : selectCateObj!["cat_id"].toString(),
-      "brand_id": "2",
-      "type_id": "1",
-      "unit_name": txtUnitName.text,
-      "unit_value": txtUnitValue.text,
-      "nutrition_weight": txtNutritionWeight.text,
-      "price": txtPrice.text,
-    });
+    Map<String, dynamic> parameters = {
+    "name": txtProName.text, // String
+    "category": otherFlag == 1
+        ? txtCatName.text // String
+        : selectCateObj?["id"], // String hoặc null
+    "brand": txtBrand.text, // String
+    "shopName": txtShopName.text, // String
+    "quantity": int.parse(txtQuantity.text), // Chuyển sang int
+    "price": int.parse(txtPrice.text), // Chuyển sang int
+    "description": txtDetail.text, // String
+    "discount": int.parse(txtDiscount.text) , // Chuyển sang int
+    "_id": widget.pObj?.id ?? "" // String hoặc null
+  };
+    sendProductData(parameters);
   }
+Future<void> sendProductData(Map<String, dynamic> parameter) async {
 
-  void submitProductApi(Map<String, String> parameter) {
-    Globs.showHUD();
-    ServiceCall.post(parameter, SVKey.svUpdateProduct, isToken: true,
-        withSuccess: (responseObj) async {
-      Globs.hideHUD();
-      if ((responseObj[KKey.status] ?? "") == "1") {
-        mdShowAlert("Success", responseObj[KKey.message] ?? MSG.success, () {
+  String jsonString = json.encode(parameter);
+  String? token = await Globs.getAuthToken(); // Lấy token
+        var headers = {
+          'Content-Type': 'application/json',
+          if (token != null)
+            'Authorization': 'Bearer $token', // Thêm header nếu token tồn tại
+        };
+  var response = await http.patch(
+    Uri.parse( SVKey.svUpdateProduct),
+    headers: headers,
+    body: jsonString, // gửi dữ liệu dưới dạng JSON
+  );
+
+  if (response.statusCode == 200) {
+     mdShowAlert("Success", "Product updated successfully", () {
           Navigator.pop(context);
         });
-      } else {
-        mdShowAlert("Error", responseObj[KKey.message] ?? MSG.fail, () {});
-      }
-    }, failure: (err) async {
-      Globs.hideHUD();
-      mdShowAlert("Error", err, () {});
-    });
+  } else {
+   mdShowAlert("Error", "Product update fail", () {});
   }
+}
+  
 }
 
 // END: abpxx6d04wxr

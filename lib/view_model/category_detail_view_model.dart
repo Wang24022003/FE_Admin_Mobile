@@ -21,7 +21,7 @@ class CategoryDetailViewModel extends GetxController {
   void onInit() {
     super.onInit();
     if (kDebugMode) {
-      print("Category Detail Init ");
+      // print("Category Detail Init ");
     }
     fetchCategoryDetails();
   }
@@ -47,7 +47,6 @@ class CategoryDetailViewModel extends GetxController {
           return CategoryDetailModelNew.fromJson(obj);
         }).toList();
         categoryDetails.value = categoryDetailsDataList;
-          print("Category Details: $categoryDetails");
       }
         else {
           Get.snackbar(Globs.appName, "Failed to fetch category details");

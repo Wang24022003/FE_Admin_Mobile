@@ -39,7 +39,7 @@ class _MainTabViewState extends State<MainTabView>
     controller = TabController(length: 7, vsync: this);
     controller?.addListener(() {
       selectTab = controller?.index ?? 0;
-      print("select tab === $selectTab");
+      // print("select tab === $selectTab");
       // if (selectTab == 3) {
       //   // favVM.serviceCalList();
       // }

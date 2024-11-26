@@ -48,7 +48,7 @@ class OfferProductModel {
     detail = json['detail'];
     unitName = json['unit_name'];
     unitValue = json['unit_value'];
-    nutritionWeight = json['nutrition_weight'];
+    nutritionWeight = json['quantity'];
     price = json['price'];
     image = json['image'];
     catName = json['cat_name'];
@@ -69,7 +69,7 @@ class OfferProductModel {
     data['detail'] = detail;
     data['unit_name'] = unitName;
     data['unit_value'] = unitValue;
-    data['nutrition_weight'] = nutritionWeight;
+    data['quantity'] = nutritionWeight;
     data['price'] = price;
     data['image'] = image;
     data['cat_name'] = catName;

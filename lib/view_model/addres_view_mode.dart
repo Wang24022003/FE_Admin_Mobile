@@ -24,7 +24,7 @@ class AddressViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("AddressViewModel Init ");
+      // print("AddressViewModel Init ");
     }
 
     serviceCallList();

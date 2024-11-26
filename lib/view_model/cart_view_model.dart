@@ -30,7 +30,7 @@ class CartViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("CartViewModel Init ");
+      // print("CartViewModel Init ");
     }
 
     serviceCallList();

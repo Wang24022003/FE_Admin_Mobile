@@ -14,7 +14,7 @@ class PromoCodeViewModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("PromoCodeViewModel Init ");
+      // print("PromoCodeViewModel Init ");
     }
 
     serviceCalList();

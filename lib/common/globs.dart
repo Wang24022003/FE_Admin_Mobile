@@ -112,6 +112,7 @@ class Globs {
 }
 
 class SVKey {
+  // static const mainUrl = "https://d988-2001-ee0-2e7-9c74-cce4-2fc8-6839-c22e.ngrok-free.app";
   static const mainUrl = "http://localhost:8800";
 
   // Hàm để lấy IPv4 Address từ thiết bị
@@ -180,10 +181,12 @@ class SVKey {
   static const cancelDeclineOrdersList =
       '${adminUrl}cancel_decline_orders_list';
 
-  static const svGetProductsList = '${adminUrl}product_list';
-  static const svCreateProduct = '${adminUrl}product_add';
-  static const svUpdateProduct = '${adminUrl}product_update';
-  static const svDeleteProduct = '${adminUrl}product_delete';
+  static const svGetProductsList = '${baseUrl}products?current=1&pageSize=111111';
+
+  static const svCreateProduct = '${baseUrl}products';
+  static const svUploadFile = '${baseUrl}files/file';
+  static const svUpdateProduct = '${baseUrl}products';
+  static const svDeleteProduct = '${baseUrl}products';
 
   static const svGetBrandList = '${adminUrl}brand_list';
   static const svCreateBrand = '${adminUrl}brand_add';
@@ -209,6 +212,8 @@ class SVKey {
   static const svGetCanceledOrders = '${baseUrl}receipts/admin?statusSupplier=CANCEL';
   static const svOrderStatusChange = '${baseUrl}receipts/status';
   static const svAdminOrderDetail = '${adminUrl}order_detail';
+
+
   static const svTotalOrderSummary = '${adminUrl}total_order_summary';
   static const svTotalPriceSummary = '${adminUrl}total_price_summary';
 

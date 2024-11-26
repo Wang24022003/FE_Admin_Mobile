@@ -19,7 +19,7 @@ class SearchModel extends GetxController {
     super.onInit();
 
     if (kDebugMode) {
-      print("SearchModel Init ");
+      // print("SearchModel Init ");
     }
 
     serviceCallListSearch(keyword);
@@ -47,7 +47,7 @@ class SearchModel extends GetxController {
           }).toList();
 
           listArrSearch.value = listDataArr;
-          print("NAMANAMANAMANAMANAM");
+          // print("NAMANAMANAMANAMANAM");
         } else {
           // Handle other cases if needed
         }

@@ -16,7 +16,7 @@ class TypeViewModel extends GetxController {
   void onInit() {
     super.onInit();
     if (kDebugMode) {
-      print("Type Init ");
+      // print("Type Init ");
     }
     fetchTypes();
   }
@@ -34,7 +34,7 @@ class TypeViewModel extends GetxController {
             return TypeModel.fromJson(obj);
           }).toList();
           types.value = typesDataList;
-          print("Types: $types");
+          // print("Types: $types");
         } else {
           //Get.snackbar(Globs.appName, "Failed to fetch types");
         }

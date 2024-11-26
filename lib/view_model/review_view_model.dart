@@ -14,7 +14,7 @@ class ReviewViewModel extends GetxController {
   void onInit() {
     super.onInit();
     if (kDebugMode) {
-      print("ReviewViewModel Init ");
+      // print("ReviewViewModel Init ");
     }
 
   }
@@ -36,7 +36,7 @@ class ReviewViewModel extends GetxController {
             }).toList();
 
             reviewList.value = listDataArr;
-            print(reviewList);
+            // print(reviewList);
           } else {
             // Xử lý trường hợp không thành công nếu cần
           }

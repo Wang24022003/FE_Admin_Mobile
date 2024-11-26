@@ -49,7 +49,7 @@ class SalesManagementViewModel extends GetxController {
           }).toList();
           salesList.value = salesDataList;
 
-          print("NAMANMAANM $salesList");
+          // print("NAMANMAANM $salesList");
         } else {
           // Xử lý trường hợp không thành công
           //Get.snackbar(Globs.appName, "Failed to fetch sales data");

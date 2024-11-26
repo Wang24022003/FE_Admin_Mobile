@@ -147,21 +147,21 @@ class _OrdersDetailViewState extends State<OrdersDetailView> {
                     ),
                   ]),
             ),
-            Obx(
-              () => ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
-                  itemBuilder: (context, index) {
-                    var pObj = adminDetailVM.cartList[index];
-                    return OrderItemRow(
-                      pObj: pObj,
-                      allowReview: widget.mObj.statusSupplier == 5,
-                    );
-                  },
-                  itemCount: adminDetailVM.cartList.length),
-            ),
+            // Obx(
+            //   () => ListView.builder(
+            //       physics: const NeverScrollableScrollPhysics(),
+            //       shrinkWrap: true,
+            //       padding:
+            //           const EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+            //       itemBuilder: (context, index) {
+            //         var pObj = adminDetailVM.cartList[index];
+            //         return OrderItemRow(
+            //           pObj: pObj,
+            //           allowReview: widget.mObj.statusSupplier == 5,
+            //         );
+            //       },
+            //       itemCount: adminDetailVM.cartList.length),
+            // ),
             Container(
               margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 15),

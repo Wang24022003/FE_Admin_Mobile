@@ -50,3 +50,29 @@ class CategoryDetailModelNew {
     };
   }
 }
+
+
+
+
+class CategoryDetailViewNew {
+  String? id;
+  String? name;
+
+  CategoryDetailViewNew({
+    this.id,
+    this.name,
+  });
+
+  // Tạo model từ JSON
+  CategoryDetailViewNew.fromJson(Map<String, dynamic> json)
+      : id = json['_id'] as String?,
+        name = json['name'] as String?;
+
+  // Chuyển model về JSON
+  Map<String, dynamic> toJson(obj) {
+    return {
+      '_id': id,
+      'name': name,
+    };
+  }
+}
