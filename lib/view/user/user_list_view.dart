@@ -50,7 +50,7 @@ class _UserListViewState extends State<UserListView> {
         elevation: 0.5,
         centerTitle: true,
         title: Text(
-          "New Users",
+          "Users",
           style: TextStyle(
             color: TColor.primaryText,
             fontSize: 20,

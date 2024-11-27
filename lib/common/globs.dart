@@ -112,8 +112,8 @@ class Globs {
 }
 
 class SVKey {
-  // static const mainUrl = "https://d988-2001-ee0-2e7-9c74-cce4-2fc8-6839-c22e.ngrok-free.app";
-  static const mainUrl = "http://localhost:8800";
+  static const mainUrl = "https://813c-2001-ee0-265-12c1-cda1-6678-f3e1-8baa.ngrok-free.app";
+  //static const mainUrl = "http://localhost:8800";
 
   // Hàm để lấy IPv4 Address từ thiết bị
   static const baseUrl = '$mainUrl/api/v1/';
