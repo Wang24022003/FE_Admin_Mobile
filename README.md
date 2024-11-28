@@ -1,13 +1,57 @@
-# Groceries FE FLUTTER
+# Ứng dụng di động bán cổ phục Việt Nam
 
-This repository contains the admin app for managing an online fashion store built with Flutter.
+Ứng dụng này nhằm mục đích giới thiệu và bán cổ phục Việt Nam trên thiết bị di động.
 
-## Member
+## Nhóm phát triển
 
 | Tên                | MSSV     |
 | ------------------ | -------- |
 | Lê Minh Quang      | 21110279 |
 | Ngô Nguyên Bảo     | 21119170 |
+
+## Figma Design
+
+Dưới đây là các màn hình chính của ứng dụng được thiết kế trên Figma:
+
+### Màn hình khởi động và welcome
+![Màn hình khởi động](./assets/figma/Start.png)
+
+![Màn hình welcome](./assets/figma/welcome.jpg)
+
+### Màn hình đăng nhập
+![Màn hình đăng nhập](./assets/figma/login.jpg)
+
+### Màn hình chính 
+
+![Màn hình chính](./assets/figma/Home.jpg)
+
+### Màn hình sản phẩm và thêm sản phẩm
+
+![Màn hình sản phẩm](./assets/figma/product.jpg)
+
+![Màn hình thêm sản phẩm](./assets/figma/AddProduct.jpg)
+
+### Màn hình đơn đặt hàng
+
+![Màn hình đơn đặt hàng](./assets/figma/oder.jpg)
+
+### Màn hình người dùng
+
+![Màn hình người dùng](./assets/figma/user.jpg)
+
+### Màn hình danh mục và thêm danh mục
+
+![Màn hình danh mục](./assets/figma/cate.jpg)
+
+![Màn hình thêm danh mục](./assets/figma/addcate.jpg)
+
+---
+
+## Use Case Diagram
+
+![Use Case Diagram](./assets/figma/use.png)
+
+
 
 ## Description
 
